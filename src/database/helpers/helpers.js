@@ -19,7 +19,8 @@ module.exports = {
     updateIngredient,
     removeIngredient,
     addRecipeIngredient,
-    removeRecipeIngredient
+    removeRecipeIngredient,
+    getShoppingList
 };
 
 async function getDishes(){
@@ -33,12 +34,20 @@ async function addDish(dish){
             .insert(dish);
 }
 
-async function getDishById(id){ 
+async function getDishById(id){
+    const recipes = await getRecipesForDish(id)
+        .then(results => results.map(elem => elem.name));
     return await db
             .select('*')
             .from('dishes')
             .where({ 'id' : id})
-            .first();
+            .first()
+            .then(res => {
+                return {
+                    ...res,
+                    recipes
+                }
+            });
 }
 
 async function updateDish(id, dish){
@@ -145,4 +154,15 @@ async function removeIngredient(id){
     return await db('ingredients')
             .where('id', id)
             .del();
+}
+
+async function getShoppingList(recipeId){
+    return await getRecipeIngredients(recipeId);
+}
+
+async function getRecipesForDish(dishId){
+    return await db
+            .select('*')
+            .from('recipes')
+            .where('dish_id', dishId);
 }
