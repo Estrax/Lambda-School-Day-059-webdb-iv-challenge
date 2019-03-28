@@ -2,6 +2,14 @@ const knex = require('knex');
 const dbConfig = require('../../../knexfile');
 const db = knex(dbConfig.development);
 
+module.exports = {
+    getDishes,
+    addDish,
+    getDishById,
+    getRecipes,
+    addRecipe
+  };
+
 function getDishes(){
     return db('dishes');
 }
