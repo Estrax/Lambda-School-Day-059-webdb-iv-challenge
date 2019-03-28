@@ -17,7 +17,8 @@ router.route('/:id')
     .get(async (req, res) => {
         await db.getRecipe(req.params.id)
             .then(recipe => res.status(200).json(recipe))
-            .catch(err => res.status(500).json({ error: "Recipe could not be retrieved."}));
+            .catch(err => console.log(err))
+            // .catch(err => res.status(500).json({ error: "Recipe could not be retrieved."}));
     })
     .put(async (req, res) => {
         await db.updateRecipe(req.params.id, req.body)

@@ -22,60 +22,80 @@ module.exports = {
     removeRecipeIngredient
 };
 
-function getDishes(){
-    return db
+async function getDishes(){
+    return await db
             .select('*')
             .from('dishes');
 }
 
-function addDish(dish){
-    return db('dishes')
+async function addDish(dish){
+    return await db('dishes')
             .insert(dish);
 }
 
-function getDishById(id){ 
-    return db
+async function getDishById(id){ 
+    return await db
             .select('*')
             .from('dishes')
             .where({ 'id' : id})
             .first();
 }
 
-function updateDish(id, dish){
-    return db('dishes')
+async function updateDish(id, dish){
+    return await db('dishes')
         .where('id', id)
         .update(dish);
 }
 
-function removeDish(id){
-    return db('dishes')
+async function removeDish(id){
+    return await db('dishes')
             .where('id', id)
             .del();
 }
 
-function getRecipes(){
-    return db
+async function getRecipes(){
+    return await db
             .select('*')
             .from('recipes');
 }
 
-function addRecipe(recipe){ 
-    return db('recipes')
+async function addRecipe(recipe){ 
+    return await db('recipes')
             .insert(recipe);
 }
 
-function getRecipe(id){
-    
+async function getRecipe(id){
+    const ingredients = await getRecipeIngredients(id) || [];
+    return await db
+            .select('dishes.name as dish', 'recipes.name as recipe', 'recipes.instructions')
+            .from('recipes')
+            .innerJoin('dishes', 'recipes.dish_id', 'dishes.id')
+            .where({ 'recipes.id' : id})
+            .first()
+            .then(res => {
+                return {
+                    ...res,
+                    ingredients
+                }
+            });
 }
 
-function updateRecipe(id, recipe){
-    return db('recipes')
+async function updateRecipe(id, recipe){
+    return await db('recipes')
         .where('id', id)
         .update(recipe);
 }
 
-function addRecipeIngredient(recipe, ingredient, quantity){
-    return db('recipe_ingredients')
+async function getRecipeIngredients(id){
+    return await db
+            .select('ingredients.name as ingredient', 'recipe_ingredients.quantity as quantity')
+            .from('recipe_ingredients')
+            .innerJoin('ingredients', 'ingredients.id', 'recipe_ingredients.ingredient_id')
+            .where('recipe_id', id);
+}
+
+async function addRecipeIngredient(recipe, ingredient, quantity){
+    return await db('recipe_ingredients')
             .insert({
                 recipe_id: recipe,
                 ingredient_id: ingredient,
@@ -83,46 +103,46 @@ function addRecipeIngredient(recipe, ingredient, quantity){
             });
 }
 
-function removeRecipeIngredient(recipe, ingredient){
-    return db('recipe_ingredients')
+async function removeRecipeIngredient(recipe, ingredient){
+    return await db('recipe_ingredients')
             .where('recipe_id', recipe)
             .where('ingredient_id', ingredient)
             .del();
 }
 
-function removeRecipe(id){
-    return db('recipes')
+async function removeRecipe(id){
+    return await db('recipes')
         .where('id', id)
         .del();
 }
 
-function getIngredients(){
-    return db
+async function getIngredients(){
+    return await db
             .select('*')
             .from('ingredients');
 }
 
-function getIngredientById(id){
-    return db
+async function getIngredientById(id){
+    return await db
             .select('*')
             .from('ingredients')
             .where({ 'id' : id})
             .first();
 }
 
-function addIngredient(ingredient){
-    return db('ingredients')
+async function addIngredient(ingredient){
+    return await db('ingredients')
             .insert(ingredient);
 }
 
-function updateIngredient(id, ingredient){
-    return db('ingredients')
+async function updateIngredient(id, ingredient){
+    return await db('ingredients')
         .where('id', id)
         .update(ingredient);
 }
 
-function removeIngredient(id){
-    return db('ingredients')
+async function removeIngredient(id){
+    return await db('ingredients')
             .where('id', id)
             .del();
 }
