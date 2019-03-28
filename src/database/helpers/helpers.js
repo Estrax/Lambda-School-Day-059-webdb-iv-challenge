@@ -6,8 +6,18 @@ module.exports = {
     getDishes,
     addDish,
     getDishById,
+    updateDish,
+    removeDish,
     getRecipes,
-    addRecipe
+    addRecipe,
+    getRecipe,
+    updateRecipe,
+    removeRecipe,
+    getIngredients,
+    getIngredientById,
+    addIngredient,
+    updateIngredient,
+    removeIngredient
 };
 
 function getDishes(){
@@ -22,10 +32,50 @@ function getDishById(id){
     return db('dishes').where({ 'id' : id});
 }
 
+function updateDish(id, dish){
+
+}
+
+function removeDish(id){
+
+}
+
 function getRecipes(){
     return db('recipes');
 }
 
 function addRecipe(recipe){ 
     return db('recipes').insert(recipe);
+}
+
+function getRecipe(id){
+
+}
+
+function updateRecipe(id, recipe){
+
+}
+
+function removeRecipe(id){
+
+}
+
+function getIngredients(){
+
+}
+
+function getIngredientById(id){
+
+}
+
+function addIngredient(ingredient){
+
+}
+
+function updateIngredient(id, ingredient){
+
+}
+
+function removeIngredient(id){
+
 }
