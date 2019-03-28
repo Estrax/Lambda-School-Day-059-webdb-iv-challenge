@@ -25,11 +25,13 @@ function getDishes(){
 }
 
 function addDish(dish){
-    return db('dishes').insert(dish);
+    return db('dishes')
+            .insert(dish);
 }
 
 function getDishById(id){ 
-    return db('dishes').where({ 'id' : id});
+    return db('dishes')
+            .where({ 'id' : id});
 }
 
 function updateDish(id, dish){
@@ -45,7 +47,8 @@ function getRecipes(){
 }
 
 function addRecipe(recipe){ 
-    return db('recipes').insert(recipe);
+    return db('recipes')
+            .insert(recipe);
 }
 
 function getRecipe(id){
@@ -61,15 +64,17 @@ function removeRecipe(id){
 }
 
 function getIngredients(){
-
+    return db('ingredients');
 }
 
 function getIngredientById(id){
-
+    return db('ingredients')
+            .where({'id': id });
 }
 
 function addIngredient(ingredient){
-
+    return db('ingredients')
+            .insert(ingredient);
 }
 
 function updateIngredient(id, ingredient){
