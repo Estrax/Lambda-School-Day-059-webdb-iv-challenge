@@ -8,7 +8,7 @@ module.exports = {
     getDishById,
     getRecipes,
     addRecipe
-  };
+};
 
 function getDishes(){
     return db('dishes');
