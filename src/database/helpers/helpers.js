@@ -35,17 +35,15 @@ async function addDish(dish){
 }
 
 async function getDishById(id){
-    const recipes = await getRecipesForDish(id)
-        .then(results => results.map(elem => elem.name));
     return await db
             .select('*')
             .from('dishes')
             .where({ 'id' : id})
             .first()
-            .then(res => {
+            .then(async res => {
                 return {
                     ...res,
-                    recipes
+                    recipes: await getRecipesForDish(id).then(results => results.map(elem => elem.name)) || []
                 }
             });
 }
@@ -74,17 +72,16 @@ async function addRecipe(recipe){
 }
 
 async function getRecipe(id){
-    const ingredients = await getRecipeIngredients(id) || [];
     return await db
             .select('dishes.name as dish', 'recipes.name as recipe', 'recipes.instructions')
             .from('recipes')
             .innerJoin('dishes', 'recipes.dish_id', 'dishes.id')
             .where({ 'recipes.id' : id})
             .first()
-            .then(res => {
+            .then(async res => {
                 return {
                     ...res,
-                    ingredients
+                    ingredients: await getRecipeIngredients(id) || []
                 }
             });
 }
